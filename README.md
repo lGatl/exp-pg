@@ -1,4 +1,4 @@
-# Exercice 1 Candidature post développeur Back-end
+# Exercice 1 Candidature développeur Node.js
 
 Bonjour, voici l'exercice demandé. 
 
@@ -10,7 +10,7 @@ J'ai listé les tables postgreSQL necessaires à l'api dans le fichier ini.sql .
 
 Vous pouvez trouver la configuration dans le fichier config.js .
 
-##Get Started
+## Get Started
 
 npm install
 
