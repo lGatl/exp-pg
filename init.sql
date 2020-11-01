@@ -10,8 +10,6 @@ CREATE TABLE public."CAR"
     CONSTRAINT "CAR_pkey" PRIMARY KEY ("ID")
 )
 
-TABLESPACE pg_default;
-
 ALTER TABLE public."CAR"
     OWNER to lgatl;
 
@@ -25,8 +23,6 @@ CREATE TABLE public."CUSTOMER"
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT customer_pkey PRIMARY KEY (id)
 )
-
-TABLESPACE pg_default;
 
 ALTER TABLE public."CUSTOMER"
     OWNER to lgatl;
@@ -43,7 +39,34 @@ CREATE TABLE public."ORDER"
     CONSTRAINT "ORDER_pkey" PRIMARY KEY ("ID")
 )
 
-TABLESPACE pg_default;
-
 ALTER TABLE public."ORDER"
     OWNER to lgatl;
+
+-- Table: public.USER
+
+-- DROP TABLE public."USER";
+
+CREATE TABLE public."USER"
+(
+    "ID" integer NOT NULL DEFAULT nextval('"USER_ID_seq"'::regclass),
+    email character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "USER_pkey" PRIMARY KEY ("ID"),
+    CONSTRAINT users_email_key UNIQUE (email)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public."USER"
+    OWNER to lgatl;
+
+
+
+
+
+
+
+
+
+
+

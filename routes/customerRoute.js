@@ -1,7 +1,8 @@
 const express = require('express')
 
-const app = express()
-//call controllers
+var { verifyToken }  = require('../utils/jwt.utils');
+
+//import customer controllers
 const { 
 	addCustomer, 
 	deleteCustomer,
@@ -13,8 +14,9 @@ const {
 
 const router = express.Router();
 
+//Assign customer controller to route 
 router.post('/customer',  addCustomer);
-router.get('/customer',  getAllCustomers);
+router.get('/customer', getAllCustomers);
 router.get('/customer/:id',  getCustomer);
 router.put('/customer/:id',  updateCustomer);
 router.delete('/customer/:id',  deleteCustomer);

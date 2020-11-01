@@ -1,7 +1,6 @@
 const express = require('express')
 
-const app = express()
-//call controllers
+///import order controllers
 const { 
 	addOrder, 
 	deleteOrder,
@@ -13,6 +12,7 @@ const {
 
 const router = express.Router();
 
+//Assign order controller to route
 router.post('/order',  addOrder);
 router.delete('/order/:id', deleteOrder);
 router.get('/order',  getAllOrders);

@@ -1,8 +1,11 @@
-require('dotenv').config()
+//Imports
+require('dotenv').config();
+const {Pool} = require('pg');
 
-const {Pool} = require('pg')//to make queries to db
+// declarate  environment variable
 const isProduction = process.env.NODE_ENV === 'production'
 
+//PostgreSQL database connection configuration
 const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`
 
 const pool = new Pool({
@@ -10,4 +13,5 @@ const pool = new Pool({
   ssl: isProduction,
 })
 
-module.exports = {pool}
+//export postgreSQL data base using function 
+module.exports = { pool }

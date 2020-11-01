@@ -1,7 +1,7 @@
 const express = require('express')
 
-const app = express()
-//call controllers
+
+//import car controllers
 const { 
 	addCar, 
 	deleteCar,
@@ -13,6 +13,7 @@ const {
 
 const router = express.Router();
 
+//Assign car controller to route 
 router.post('/car',  addCar);
 router.get('/car',  getAllCars);
 router.get('/car/:id',  getCar);
@@ -20,4 +21,5 @@ router.get('/car/order/:order_id', getCarsByOrderId);
 router.put('/car/:id',  updateCar);
 router.delete('/car/:id',  deleteCar);
 
+//export routes
 module.exports = router;
