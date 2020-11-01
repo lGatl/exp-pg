@@ -9,7 +9,7 @@ const {
 	getCar,
 	getCarsByOrderId,
 	updateCar
-	  } = require('../controllers/carController');
+} = require('../controllers/carController');
 
 const router = express.Router();
 

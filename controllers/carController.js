@@ -1,6 +1,7 @@
 //Import
 const {pool} = require('../config')
 const { getUserId } = require('../utils/jwt.utils');
+const extendCommonController = require('./commonController');
 
 /*====================================
 Preparation of all the functions that interact with the car table of the database
@@ -39,61 +40,6 @@ const addCar = (request, response) => {
 	)
 }
 
-//---------Delete a car----------
-const deleteCar = (request, response) => {
-
-	// -Authentication : comment to desactivate authentication-
-		var userId = getUserId(request.headers['authorization']);
-		if (userId < 0)
-			return response.status(400).json({ 'error': 'wrong token' });
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-	const { id } = request.params;
-
-		//Chech parameter
-	if ( !id ) {
-			return response.status(400).json({ 'error': 'missing parameters' });
-		}
-	if ( isNaN(id) ) {
-			return response.status(400).json({ 'error': 'bad parameters' });
-		}
-
-	// Delete postgreSQL database request 
-	pool.query('DELETE FROM "CAR" WHERE ("ID" = $1) ', 
-		[id],
-		(error) => {
-		if (error) {
-			return response.status(500).json({ 'error': 'cannot delete Customer' });
-		}
-		response.status(201).json({status: 'success', message: 'Car deleted.'})
-	})
-}
-
-//----------Find all cars----------
-const getAllCars = (request, response) => {
-
-	// -Authentication : comment to desactivate authentication-
-		var userId = getUserId(request.headers['authorization']);
-		if (userId < 0)
-			return response.status(400).json({ 'error': 'wrong token' });
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-	// Select postgreSQL database request
-	pool.query('SELECT * FROM "CAR"', (error, results) => {
-		if (error) {
-			return response.status(500).json({ 'error': 'cannot find Cars' });
-		}
-		if(results&&results.rows){
-			return response.status(200).json(results.rows)
-		}
-		response.status(404).json({ 'error': 'not found Cars' });
-	})
-}
-
 //-------Find cars by order id--------
 const getCarsByOrderId = (request, response) => {
 
@@ -129,41 +75,6 @@ const getCarsByOrderId = (request, response) => {
 	})
 }
 
-//-------Find one car by id--------
-const getCar = (request, response) => {
-
-	// -Authentication : comment to desactivate authentication-
-		var userId = getUserId(request.headers['authorization']);
-		if (userId < 0)
-			return response.status(400).json({ 'error': 'wrong token' });
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-	const { id } = request.params;
-
-		 //Chech parameter
-	if ( !id ) {
-			return response.status(400).json({ 'error': 'missing parameters' });
-		}
-	if ( isNaN(id) ) {
-			return response.status(400).json({ 'error': 'bad parameters' });
-		}
-
-	// Select postgreSQL database request
-	pool.query('SELECT * FROM "CAR" WHERE ("ID" = $1)', 
-		[id],
-		(error, results) => {
-		if (error) {
-			return response.status(500).json({ 'error': 'cannot find Car' });
-		}
-		if(results&&results.rows&&results.rows[0]){
-			return response.status(200).json(results.rows[0])
-		}
-		response.status(404).json({ 'error': 'not found Car' });
-
-	})
-}
 //------Update one car found by ID-------
 const updateCar = (request, response) => {
 
@@ -200,13 +111,13 @@ const updateCar = (request, response) => {
 }
 
 //export Function => (will be import in ../routes/carRoute)
-module.exports = {
+module.exports = {//Export customer cars
+	//add commons coltrollers for car
+	...extendCommonController("car"),
+	//add car controllers
 	addCar,
-	deleteCar,
-	getAllCars,
 	getCarsByOrderId,
-	getCar,
-	updateCar,
+	updateCar
 };
 
 

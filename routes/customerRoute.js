@@ -9,7 +9,6 @@ const {
 	getAllCustomers, 
 	getCustomer,
 	updateCustomer, 
-
 } = require('../controllers/customerController');
 
 const router = express.Router();

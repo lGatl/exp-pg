@@ -3,6 +3,7 @@ var bcrypt    = require('bcrypt');
 var jwtUtils  = require('../utils/jwt.utils');
 var asyncLib  = require('async');
 const {pool} = require('../config')
+const extendCommonController = require('./commonController');
 
 // Constants for syntax checking
 const EMAIL_REGEX     = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -146,7 +147,7 @@ const login = function(request, response) {
 		if (userId < 0){
 			return response.status(400).json({ 'error': 'wrong token' });
 		}
-		
+
 		// Select postgreSQL database request
 		pool.query('SELECT * FROM "USER" WHERE ("ID" = $1)', 
 			[userId],
@@ -237,11 +238,16 @@ const login = function(request, response) {
 	}
 
 //export Function => (will be import in ../routes/userRoute)
-module.exports = {
+module.exports = {//Export user controllers
+	//add common controllers for user
+	...extendCommonController("user"),
+	//add user controllers
 	register,
 	login,
 	getUserProfile,
-	updateUserProfile
+	updateUserProfile,
+
+
 
  
 

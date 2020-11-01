@@ -1,10 +1,12 @@
 //Import
 const {pool} = require('../config')
 const { getUserId } = require('../utils/jwt.utils');
+const extendCommonController = require('./commonController');
 
 /*========================================
 Preparation of all the functions that interact with the order table of the database
 ==========================================*/
+
 
 //----------Insert a new order------------
 const addOrder = (request, response) => {
@@ -37,60 +39,6 @@ const addOrder = (request, response) => {
 			response.status(201).json({status: 'success', message: 'Order added.'})
 		},
 	)
-}
-
-//----------Delete a order------------
-const deleteOrder = (request, response) => {
-
-	// -Authentication : comment to desactivate authentication-
-		var userId = getUserId(request.headers['authorization']);
-		if (userId < 0)
-			return response.status(400).json({ 'error': 'wrong token' });
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-	const { id } = request.params;
-
-	//Chech parameter
-	if ( !id ) {
-			return response.status(400).json({ 'error': 'missing parameters' });
-		}
-	if ( isNaN(id) ) {
-			return response.status(400).json({ 'error': 'bad parameters' });
-		}
-
-	// Delete postgreSQL database request 
-	pool.query('DELETE FROM "ORDER" WHERE ("ID" = $1) ', 
-		[id],
-		(error) => {
-		if (error) {
-			return response.status(500).json({ 'error': 'cannot delete Order' });
-		}
-		response.status(201).json({status: 'success', message: 'Order deleted.'})
-	})
-}
-
-
-//----------Find all orders----------
-const getAllOrders = (request, response) => {
-
-	// -Authentication : comment to desactivate authentication-
-		var userId = getUserId(request.headers['authorization']);
-		if (userId < 0)
-			return response.status(400).json({ 'error': 'wrong token' });
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-	// Select postgreSQL database request
-	pool.query('SELECT * FROM "ORDER"', (error, results) => {
-		if (error) {
-			return response.status(500).json({ 'error': 'cannot find Orders' });
-		}
-		if( results && results.rows ){
-			return response.status(200).json(results.rows)
-		}
-		response.status(404).json({ 'error': 'not found Orders' });
-	})
 }
 
 //-------Find orders by customer id--------
@@ -127,39 +75,6 @@ const getOrdersByCustomerId = (request, response) => {
 	})
 }
 
-//-------Find one order by id--------
-const getOrder = (request, response) => {
-
-	// -Authentication : comment to desactivate authentication-
-		var userId = getUserId(request.headers['authorization']);
-		if (userId < 0)
-			return response.status(400).json({ 'error': 'wrong token' });
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	
-	const { id } = request.params;
-
-		 //Chech parameter
-	if ( !id ) {
-			return response.status(400).json({ 'error': 'missing parameters' });
-		}
-	if ( isNaN(id) ) {
-			return response.status(400).json({ 'error': 'bad parameters' });
-		}
-
-	// Select postgreSQL database request
-	pool.query('SELECT * FROM "ORDER" WHERE ("ID" = $1)', 
-		[id],
-		(error, results) => {
-		if (error) {
-			return response.status(500).json({ 'error': 'cannot add Order' });
-		}
-		if(results&&results.rows&&results.rows[0]){
-			return response.status(200).json(results.rows[0])
-		}
-		response.status(404).json({ 'error': 'not found Order' });
-	})
-}
 
 //------Update one order found by ID-------
 const updateOrder = (request, response) => {
@@ -195,13 +110,12 @@ const updateOrder = (request, response) => {
 	)
 }
 
-
 //export Function => (will be import in ../routes/orderRoute)
-module.exports = {
+module.exports = {//Export order controllers
+	//add common controllers for order
+	...extendCommonController("order"),
+	//add order controllers
 	addOrder,
-	deleteOrder,
-	getAllOrders,
-	getOrder,
 	getOrdersByCustomerId,
 	updateOrder
 };

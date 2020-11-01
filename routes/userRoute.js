@@ -5,8 +5,11 @@ const {
 	register, 
 	login,
 	getUserProfile,
-	updateUserProfile
-	  } = require('../controllers/userController');
+	updateUserProfile,
+	deleteUser,
+	getAllUsers, 
+	getUser,
+} = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -15,5 +18,8 @@ router.post('/user/register/',  register);
 router.get('/user/login/',  login);
 router.get('/user/me/',  getUserProfile);
 router.put('/user/me/', updateUserProfile);
+router.delete('/user/:id', deleteUser);
+router.get('/user',  getAllUsers);
+router.get('/user/:id',  getUser);
 
 module.exports = router;
