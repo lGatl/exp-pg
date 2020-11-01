@@ -10,7 +10,7 @@ can interact with multiple table of the database
 
  	const capitalize = function(string) {return string.charAt(0).toUpperCase() + string.slice(1)}
 
-	//---------Delete a car----------
+	//---------Delete a element of Table named table_string---------
 	const deletecommon = (request, response) => {
 
 		// -Authentication : comment to desactivate authentication-
@@ -40,7 +40,7 @@ can interact with multiple table of the database
 		})
 	}
 
-	//----------Find all cars----------
+	//----------Find all elements of Table named table_string----------
 	const getAll = (request, response) => {
 
 		// -Authentication : comment to desactivate authentication-
@@ -63,7 +63,7 @@ can interact with multiple table of the database
 		})
 	}
 
-	//-------Find one car by id--------
+	//-------Find one element of Table named table_stringby id--------
 	const get = (request, response) => {
 
 		// -Authentication : comment to desactivate authentication-
@@ -71,8 +71,6 @@ can interact with multiple table of the database
 			if (userId < 0)
 				return response.status(400).json({ 'error': 'wrong token' });
 		// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
 
 		const { id } = request.params;
 
@@ -100,12 +98,13 @@ can interact with multiple table of the database
 	}
 
 	return {
+		//prepare normalize controllers
 		["delete"+capitalize(table_string)]:deletecommon,
 		["getAll"+capitalize(table_string)+"s"]:getAll,
 		["get"+capitalize(table_string)]:get,
 	}
 }
-
+//Export function to extend a controller with comon controllers
 module.exports = extendCommonController
 
 
